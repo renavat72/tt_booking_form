@@ -1,24 +1,21 @@
-import logo from './logo.svg';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
+import { Theme } from './components/Theme';
+import { FormWindow } from './components/Windows/FormWindow';
+import { ResultWindow } from './components/Windows/ResultWindows';
+import { fetchData } from './store/asyncActions';
 
 function App() {
+  const { post, error, loading } = useSelector(state => state.postReducer);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Theme>
+      {post ? <ResultWindow post={post} error={error}/> :  <FormWindow loading={loading} /> }
+    </Theme>
   );
 }
 
